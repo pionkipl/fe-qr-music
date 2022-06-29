@@ -1,7 +1,10 @@
 <template>
-  <div class="home">
-
+  <div class="container">
+    <div class="home">
+      <p>home</p>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -12,3 +15,13 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .home {
+    margin-top: 76px;
+
+    @media screen and (max-width: 767px) {
+      margin-top: 15px;
+    }
+  }
+</style>
