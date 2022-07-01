@@ -15,10 +15,11 @@ export default {
 
 <style scoped lang="scss">
   .form {
-    margin-top: 76px;
+    margin-top: 90px;
 
     @media screen and (max-width: 767px) {
       margin-top: 15px;
+      margin-right: 60px;
     }
   }
 </style>
