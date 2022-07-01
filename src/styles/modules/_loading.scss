@@ -1,7 +1,7 @@
 .loader-ring {
     display: inline-block;
-    width: 70px;
-    height: 70px;
+    width: 42px;
+    height: 42px;
     position: absolute;
     top:50%;
     left:50%;
@@ -10,13 +10,19 @@
 .loader-ring:after {
     content: " ";
     display: block;
-    width: 42px;
-    height: 42px;
+    width: 32px;
+    height: 32px;
     margin: 4px;
     border-radius: 50%;
     border: 3px solid #fff;
     border-color: #fff transparent #fff transparent;
     animation: lds-dual-ring 1.2s linear infinite;
+}
+
+.button:hover {
+    .loader-ring:after {
+        border-color: #000 transparent #000 transparent;
+    }
 }
 @keyframes lds-dual-ring {
     0% {
