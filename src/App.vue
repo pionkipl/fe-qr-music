@@ -2,7 +2,9 @@
   <navigation-component></navigation-component>
   <router-view v-slot="{ Component }">
     <transition mode="out-in" name="bounce">
-      <component :is="Component" />
+      <KeepAlive>
+        <component :is="Component" />
+      </KeepAlive>
     </transition>
   </router-view>
 </template>
