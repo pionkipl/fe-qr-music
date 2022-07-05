@@ -6,7 +6,7 @@
         <ul class="history__list">
           <li class="history__list-item" v-for="(song, i) in history" :key="i">
             <p>{{ i + 1 }}.</p>
-            <p>{{ song.name }}</p>
+            <p>{{ song.title }}</p>
           </li>
         </ul>
       </div>
@@ -16,15 +16,26 @@
 </template>
 
 <script>
+import api from "@/helpers/api"
+
 export default {
   name: "HistoryView",
   data () {
     return {
-      history: [
-        { name: 'Eminem just lose it' },
-        { name: 'Mad world' },
-        { name: 'America' }
-      ]
+      history: []
+    }
+  },
+  mounted () {
+    this.getSongs()
+  },
+  methods: {
+    async getSongs () {
+      try {
+        const resp = await api.get('/history')
+        this.history = resp.data.data
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }
