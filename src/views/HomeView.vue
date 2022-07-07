@@ -3,7 +3,7 @@
     <div class="home">
       <h2 class="text-center">{{ url ? 'Current Song' : 'Song is loading' }}</h2>
       <template v-if="url">
-        <p class="text-center home__title">Text</p>
+        <p class="text-center home__title">{{ title }}</p>
         <div class="home__player">
           <div>
             <img @click="playCurrentVideo" class="home__player-btn" src="@/img/play-btn.svg" alt="">
@@ -12,10 +12,9 @@
         </div>
         <div class="home__yt">
           <div class="home__yt-iframe">
-            <youtube-vue3 @ready="myFunc"
-                          ref="youtube"
+            <youtube-vue3 ref="youtube"
                           class="home__yt-player"
-                          :videoid="url"
+                          :videoid="id"
                           :loop="0"
                           :autoplay="1" />
           </div>
@@ -37,21 +36,37 @@ export default {
   },
   data () {
     return {
-      url: 'jwMG9wlhc84'
+      url: '',
+      id: '',
+      title: ''
     }
   },
-  mounted () {
-    // this.playCurrentVideo()
+  async mounted () {
+    await this.getLastSong()
+    this.extractVideoID(`${this.url}`)
+    this.playCurrentVideo()
   },
   methods: {
-    myFunc () {
-      console.log('ready')
+    async getLastSong () {
+      const resp = await this.$store.getters.lastSong
+      this.url = resp.url
+      this.title = resp.title
     },
     playCurrentVideo () {
       this.$refs.youtube.player.playVideo()
     },
     pauseCurrentVideo () {
       this.$refs.youtube.player.pauseVideo()
+    },
+    extractVideoID (url) {
+      // eslint-disable-next-line
+      const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/
+      const match = url.match(regExp)
+      if (match && match[7].length === 11) {
+        this.id = match[7]
+      } else {
+        alert('Could not extract video ID.')
+      }
     }
   }
 }
