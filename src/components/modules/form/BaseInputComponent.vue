@@ -1,16 +1,17 @@
 <template>
   <div class="input">
-    <label :class="{error: errors.length}"
+    <label :class="{error: JSON.stringify(errors) !== '{}'}"
            :for="id">
       {{ label }}</label>
     <input
+      v-bind="$attrs"
       :type="type"
       :id="id"
-      :value="value"
+      :value="modelValue"
       :placeholder="placeholder"
-      :class="{error: errors.length}"
+      :class="{error: JSON.stringify(errors) !== '{}'}"
       :maxlength="maxLength"
-      @input="formatValue($event)"
+      @input="formatValue"
     >
     <input-errors-component
       :errors="errors"
@@ -32,12 +33,12 @@ export default {
       type: String,
       default: 'text'
     },
-    value: String,
+    modelValue: String,
     placeholder: String,
     maxLength: String,
     errors: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     },
     format: String
   },
@@ -48,7 +49,7 @@ export default {
   },
   methods: {
     formatValue ($event) {
-      this.$emit('input', $event.target.value)
+      this.$emit('update:modelValue', $event.target.value)
     }
   }
 }

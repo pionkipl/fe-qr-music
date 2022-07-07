@@ -1,8 +1,6 @@
 <template>
-  <div v-if="errors.length" class="errors">
-    <div v-for="(error, index) in errors" :key="index">
-      {{ error }}
-    </div>
+  <div v-if="JSON.stringify(errors) !== '{}'" class="errors">
+    {{ errors['msg'] }}
   </div>
 </template>
 
@@ -11,8 +9,8 @@ export default {
   name: "InputErrorsComponent",
   props: {
     errors: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     }
   }
 }
