@@ -16,27 +16,20 @@
 </template>
 
 <script>
-import api from "@/helpers/api"
-
+import { mapState } from 'vuex'
 export default {
   name: "HistoryView",
   data () {
     return {
-      history: []
     }
   },
   mounted () {
-    this.getSongs()
+
   },
-  methods: {
-    async getSongs () {
-      try {
-        const resp = await api.get('/history')
-        this.history = resp.data.data
-      } catch (e) {
-        console.log(e)
-      }
-    }
+  computed: {
+    ...mapState({
+      history: state => state.songs.songs
+    })
   }
 }
 </script>
@@ -56,6 +49,7 @@ export default {
       margin: 0 auto;
       border-radius: 10px;
       box-shadow: 2px 2px 3px #000;
+      position: relative;
     }
 
     &__list {
