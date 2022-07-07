@@ -9,22 +9,27 @@
               id="title"
               label="Song title"
               placeholder="Type song title"
-              v-model="form.name"
+              v-model="form.title"
               :errors="errors('title')">
             </base-input-component>
           </div>
           <div class="col-12">
             <base-input-component
               id="videoId"
-              label="Video id"
-              placeholder="Type youtube video id"
-              v-model="form.name"
-              :errors="errors('videoId')">
+              label="Youtube video url"
+              placeholder="Type youtube video url"
+              v-model="form.videoUrl"
+              :errors="errors('videoUrl')">
             </base-input-component>
           </div>
           <div class="col-12">
             <div class="d-flex justify-content-center">
               <button type="submit" class="button"><span v-if="isSending" class="loader-ring"></span><span :style="{opacity: !isSending ? '1' : '0'}">Send</span></button>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="d-flex justify-content-center">
+              <form-response-component :response="response"></form-response-component>
             </div>
           </div>
         </div>
@@ -35,22 +40,25 @@
 
 <script>
 import BaseInputComponent from "@/components/modules/form/BaseInputComponent"
+import FormResponseComponent from "@/components/modules/form/FormResponseComponent"
 
 import api from '@/helpers/api.js'
 
 export default {
   name: "FormView",
   components: {
-    BaseInputComponent
+    BaseInputComponent,
+    FormResponseComponent
   },
   data () {
     return {
       form: {
         title: '',
-        videoId: ''
+        videoUrl: ''
       },
-      response: null,
-      isSending: false
+      errorsList: {},
+      isSending: false,
+      response: {}
     }
   },
   methods: {
@@ -59,42 +67,28 @@ export default {
         if (!this.isSending) {
           this.isSending = true
           const resp = await api.post('add', this.form)
-
-          this.response = {
-            success: true,
-            data: resp.data
-          }
+          this.response = resp
+          setTimeout(() => {
+            this.response = {}
+          }, 5000)
           this.resetForm()
-          this.isSending = false
+          this.$store.dispatch('getSongs')
         }
       } catch (e) {
-        this.response = {
-          success: false,
-          data: e.response.data
-        }
-        this.scrollToFirstError()
+        console.log('e', e)
+        this.errorsList = e.response.data.errors
+        this.response = e.response
+        this.isSending = false
       }
-      this.isSending = true
+      this.isSending = false
     },
     resetForm () {
       this.form.title = ''
-      this.form.videoId = ''
+      this.form.videoUrl = ''
+      this.errorsList = {}
     },
     errors (field) {
-      try {
-        return this.response.data.errors[field]
-      } catch (e) {
-        return []
-      }
-    },
-    scrollToFirstError () {
-      this.$nextTick(() => {
-        const domRect = document.querySelector('.error').getBoundingClientRect()
-        window.scrollTo(
-          domRect.left + document.documentElement.scrollLeft,
-          domRect.top + document.documentElement.scrollTop - 150
-        )
-      })
+      return this.errorsList[field] || {}
     }
   }
 }
