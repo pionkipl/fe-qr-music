@@ -1,8 +1,7 @@
 <template>
   <div class="container">
-    <div class="home">
+    <div class="home" v-if="url">
       <h2 class="text-center">{{ url ? 'Current Song' : 'Song is loading' }}</h2>
-      <template v-if="url">
         <p class="text-center home__title">{{ title }}</p>
         <div class="home__player">
           <div>
@@ -12,23 +11,23 @@
         </div>
         <div class="home__yt">
           <div class="home__yt-iframe">
-            <youtube-vue3 ref="youtube"
+            <youtube-vue3 v-if="id"
+                          ref="youtube"
                           class="home__yt-player"
                           :videoid="id"
                           :loop="0"
                           :autoplay="1" />
           </div>
         </div>
-      </template>
-      <div v-else class="loader-ring"></div>
-
     </div>
+    <div v-else class="loader-ring"></div>
   </div>
 
 </template>
 
 <script>
 import { YoutubeVue3 } from 'youtube-vue3'
+import { nextTick } from 'vue'
 export default {
   name: 'HomeView',
   components: {
@@ -38,19 +37,20 @@ export default {
     return {
       url: '',
       id: '',
-      title: ''
+      title: '',
+      resp: null
     }
   },
   async mounted () {
     await this.getLastSong()
-    this.extractVideoID(`${this.url}`)
-    this.playCurrentVideo()
   },
   methods: {
     async getLastSong () {
       const resp = await this.$store.getters.lastSong
       this.url = resp.url
       this.title = resp.title
+      this.extractVideoID(`${this.url}`)
+      await nextTick()
     },
     playCurrentVideo () {
       this.$refs.youtube.player.playVideo()
