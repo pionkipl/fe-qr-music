@@ -55,6 +55,9 @@ export default {
     &__list {
       padding: 0;
       list-style-type: none;
+      max-height: 70vh;
+      height: 100%;
+      overflow-y: auto;
     }
 
     &__list-item {

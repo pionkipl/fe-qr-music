@@ -47,10 +47,10 @@ export default {
   methods: {
     async getLastSong () {
       const resp = await this.$store.getters.lastSong
+      await nextTick()
       this.url = resp.url
       this.title = resp.title
       this.extractVideoID(`${this.url}`)
-      await nextTick()
     },
     playCurrentVideo () {
       this.$refs.youtube.player.playVideo()
