@@ -5,8 +5,14 @@
         <p class="text-center home__title">{{ title }}</p>
         <div class="home__player">
           <div>
-            <img @click="playCurrentVideo" class="home__player-btn" src="@/img/play-btn.svg" alt="">
-            <img @click="pauseCurrentVideo"  class="home__player-btn" src="@/img/pause-btn.svg" alt="">
+            <template v-if="playing">
+              <img @click="playCurrentVideo" class="home__player-btn" src="@/img/play-btn-playing.svg" alt="">
+              <img @click="pauseCurrentVideo"  class="home__player-btn" src="@/img/pause-btn.svg" alt="">
+            </template>
+            <template v-else>
+              <img @click="playCurrentVideo" class="home__player-btn" src="@/img/play-btn.svg" alt="">
+              <img @click="pauseCurrentVideo"  class="home__player-btn" src="@/img/stop-btn-playing.svg" alt="">
+            </template>
           </div>
         </div>
         <div class="home__yt">
@@ -16,7 +22,7 @@
                           class="home__yt-player"
                           :videoid="id"
                           :loop="0"
-                          :autoplay="1" />
+                          :autoplay="0" />
           </div>
         </div>
     </div>
@@ -28,6 +34,7 @@
 <script>
 import { YoutubeVue3 } from 'youtube-vue3'
 import { nextTick } from 'vue'
+import api from "@/helpers/api"
 export default {
   name: 'HomeView',
   components: {
@@ -38,25 +45,38 @@ export default {
       url: '',
       id: '',
       title: '',
-      resp: null
+      resp: null,
+      playing: false
     }
   },
   async mounted () {
     await this.getLastSong()
   },
+  watch: {
+    title (oldVal, newVal) {
+      console.log('old', oldVal)
+      console.log('new', newVal)
+    }
+  },
   methods: {
     async getLastSong () {
-      const resp = await this.$store.getters.lastSong
-      await nextTick()
-      this.url = resp.url
-      this.title = resp.title
-      this.extractVideoID(`${this.url}`)
+      try {
+        const resp = await api.get('/history')
+        await nextTick()
+        this.url = resp.data.data[0].url
+        this.title = resp.data.data[0].title
+        this.extractVideoID(`${this.url}`)
+      } catch (e) {
+        console.log(e)
+      }
     },
     playCurrentVideo () {
       this.$refs.youtube.player.playVideo()
+      this.playing = true
     },
     pauseCurrentVideo () {
       this.$refs.youtube.player.pauseVideo()
+      this.playing = false
     },
     extractVideoID (url) {
       // eslint-disable-next-line
