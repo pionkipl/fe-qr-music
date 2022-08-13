@@ -21,7 +21,7 @@ import { mapState } from "vuex"
 export default {
   name: "ElectricityView",
   computed: {
-    formattedDates(date) {
+    formattedDates (date) {
       return dayjs(date).format('YYYY-MM-DDTHH:mm:ss')
     },
     ...mapState({
