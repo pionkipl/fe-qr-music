@@ -13,6 +13,9 @@ const electricity = {
     async getLogs ({ commit }) {
       try {
         const resp = await api.get('/electricity')
+        console.log(resp)
+        console.log(resp.data)
+        console.log(resp.data.data)
         commit('setLogs', resp.data.data)
       } catch (e) {
         console.log(e)
