@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import songs from './states/songs'
+import electricity from "./states/electricity"
 
 export default createStore({
   state: {
@@ -11,6 +12,7 @@ export default createStore({
   actions: {
   },
   modules: {
-    songs
+    songs,
+    electricity
   }
 })
