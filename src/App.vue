@@ -14,6 +14,7 @@ import { useStore } from 'vuex'
 const store = useStore()
 onBeforeMount(() => {
   store.dispatch('getSongs')
+  store.dispatch('getLogs')
 })
 </script>
 
