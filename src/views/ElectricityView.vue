@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="electricity">
+    <div class="history">
       <h2 class="text-center mb-5">History logs</h2>
       <div class="history__list-container">
         <ul class="history__list">
@@ -21,7 +21,7 @@ export default {
   name: "ElectricityView",
   computed: {
     ...mapState({
-      history: state => state.logs
+      history: state => state.electricity.logs
     })
   }
 }
