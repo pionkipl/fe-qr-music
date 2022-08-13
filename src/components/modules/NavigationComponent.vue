@@ -14,6 +14,7 @@
               <li class="navigation__link"><router-link :to="{name: 'home'}">Home</router-link></li>
               <li class="navigation__link"><router-link :to="{name: 'form'}">Add Song</router-link></li>
               <li class="navigation__link"><router-link :to="{name: 'history'}">History</router-link></li>
+              <li class="navigation__link"><router-link :to="{name: 'electricity'}">El</router-link></li>
             </ul>
           </div>
         </div>
