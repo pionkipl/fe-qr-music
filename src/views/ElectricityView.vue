@@ -6,7 +6,7 @@
         <ul class="history__list">
           <li class="history__list-item" v-for="(log, i) in history" :key="i">
             <p>{{ i + 1 }}.</p>
-            <p>{{ formattedDates(log.date) }}</p>
+            <p>{{ formattedDates(String(log.date)) }}</p>
           </li>
         </ul>
       </div>
