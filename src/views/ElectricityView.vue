@@ -6,7 +6,7 @@
         <ul class="history__list">
           <li class="history__list-item" v-for="(log, i) in history" :key="i">
             <p>{{ i + 1 }}.</p>
-            <p>{{ log.date }}</p>
+            <p>{{ formattedDates(log.date) }}</p>
           </li>
         </ul>
       </div>
@@ -15,11 +15,15 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
 import { mapState } from "vuex"
 
 export default {
   name: "ElectricityView",
   computed: {
+    formattedDates(date) {
+      return dayjs(date).format('YYYY-MM-DDTHH:mm:ss')
+    },
     ...mapState({
       history: state => state.electricity.logs
     })
